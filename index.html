@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>active value – Finanzplanung 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --av-green: #8AB62D;
+  --av-green-dark: #6A9122;
+  --av-green-light: #E8F3D4;
+  --av-green-bg: #F4F9EC;
+  --av-gray-900: #1E1E1E;
+  --av-gray-700: #3A3A3A;
+  --av-gray-500: #6B6B6B;
+  --av-gray-300: #B0B0B0;
+  --av-gray-100: #F2F2F2;
+  --av-white: #FFFFFF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--av-gray-700);
+  line-height: 1.7;
+  background: var(--av-white);
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+/* Hero */
+.hero {
+  background: var(--av-gray-900);
+  color: var(--av-white);
+  padding: 4rem 0 3.5rem;
+}
+.hero .container { display: flex; flex-direction: column; gap: 2rem; }
+.hero-logo { height: 48px; align-self: flex-start; }
+.hero h1 { font-size: 2.2rem; font-weight: 600; line-height: 1.2; color: var(--av-white); }
+.hero .subtitle { font-size: 1.1rem; color: var(--av-gray-300); max-width: 640px; }
+.hero-badge {
+  display: inline-block;
+  background: var(--av-green);
+  color: var(--av-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+/* KPI bar */
+.kpi-bar {
+  background: var(--av-green-bg);
+  border-top: 3px solid var(--av-green);
+  padding: 2rem 0;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.kpi-item { text-align: center; }
+.kpi-value { font-size: 1.8rem; font-weight: 700; color: var(--av-green-dark); }
+.kpi-label { font-size: 0.8rem; color: var(--av-gray-500); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Sections */
+section { padding: 3rem 0; border-bottom: 1px solid var(--av-gray-100); }
+section:last-of-type { border-bottom: none; }
+section h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--av-gray-900);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--av-green);
+  display: inline-block;
+}
+section p { margin-bottom: 1rem; max-width: 720px; }
+
+/* Highlight box */
+.highlight {
+  background: var(--av-green-bg);
+  border-left: 4px solid var(--av-green);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+.highlight strong { color: var(--av-green-dark); }
+
+/* Measures grid */
+.measures-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.measure-card {
+  background: var(--av-white);
+  border: 1px solid var(--av-gray-100);
+  border-top: 3px solid var(--av-green);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+.measure-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--av-gray-900);
+  margin-bottom: 0.75rem;
+}
+.measure-card p { font-size: 0.9rem; color: var(--av-gray-500); margin-bottom: 0; }
+.measure-number {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--av-green);
+  margin-bottom: 0.5rem;
+}
+
+/* Chart containers */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  margin: 1.5rem 0;
+  background: var(--av-white);
+  border: 1px solid var(--av-gray-100);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+.chart-wrap h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--av-gray-700);
+  margin-bottom: 1rem;
+}
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+  color: var(--av-gray-500);
+}
+.chart-legend span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.chart-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* Quarterly table */
+.q-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+.q-table th {
+  background: var(--av-gray-900);
+  color: var(--av-white);
+  padding: 10px 16px;
+  text-align: right;
+  font-weight: 500;
+}
+.q-table th:first-child { text-align: left; border-radius: 6px 0 0 0; }
+.q-table th:last-child { border-radius: 0 6px 0 0; }
+.q-table td {
+  padding: 10px 16px;
+  text-align: right;
+  border-bottom: 1px solid var(--av-gray-100);
+}
+.q-table td:first-child { text-align: left; font-weight: 500; color: var(--av-gray-900); }
+.q-table tr:last-child td { font-weight: 600; background: var(--av-green-bg); }
+.positive { color: var(--av-green-dark); }
+.negative { color: #C0392B; }
+
+/* CTA */
+.cta {
+  background: var(--av-gray-900);
+  color: var(--av-white);
+  padding: 3rem 0;
+  text-align: center;
+}
+.cta h2 { color: var(--av-white); border: none; display: block; margin-bottom: 1rem; }
+.cta p { color: var(--av-gray-300); max-width: 560px; margin: 0 auto 1.5rem; }
+.cta-contact {
+  font-size: 1.1rem;
+  color: var(--av-green);
+  font-weight: 600;
+}
+
+/* Footer */
+footer {
+  padding: 1.5rem 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--av-gray-300);
+}
+
+/* Print */
+@media print {
+  .hero { padding: 2rem 0; }
+  section { page-break-inside: avoid; }
+  .chart-wrap { page-break-inside: avoid; }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .measures-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <img src="data:image/png;base64,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" alt="active value" class="hero-logo">
+    <h1>Finanz- und Liquiditätsplanung 2026</h1>
+    <p class="subtitle">Operative Neuausrichtung, gesicherte Umsatzpipeline und KI-gestützte Produktivitätssteigerung – unser Plan für ein profitables Geschäftsjahr 2026.</p>
+    <span class="hero-badge">Vertraulich – erstellt März 2026</span>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="kpi-bar">
+  <div class="container">
+    <div class="kpi-grid">
+      <div class="kpi-item">
+        <div class="kpi-value">2,26 Mio €</div>
+        <div class="kpi-label">Umsatzprognose</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-value">+155 T€</div>
+        <div class="kpi-label">Jahresergebnis</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-value">Juli 2026</div>
+        <div class="kpi-label">Break-even kumuliert</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-value">6,8 %</div>
+        <div class="kpi-label">Umsatzrendite</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1. AUSGANGSLAGE -->
+<section>
+  <div class="container">
+    <h2>Ausgangslage</h2>
+    <p>Das Geschäftsjahr 2025 schloss active value mit einem positiven Ergebnis von 6.450 € bei einem Umsatz von 2,40 Mio. € ab. Die Agentur war voll besetzt, die Auslastung stabil.</p>
+    <p>Im ersten Quartal 2026 hat sich das Marktumfeld deutlich verändert. Die Zurückhaltung bei Auftragsvergaben ist branchenübergreifend spürbar – Projekte werden verschoben, Budgets gekürzt, Entscheidungszyklen haben sich verlängert. Steigende Energiekosten und geopolitische Unsicherheiten belasten zusätzlich.</p>
+    <p>Das Q1 2026 schließt mit einem Minus von rund 24.000 €. Wir haben frühzeitig reagiert und im März 2026 drei Maßnahmenpakete eingeleitet.</p>
+
+    <div class="measures-grid">
+      <div class="measure-card">
+        <div class="measure-number">−22,4 T€/M</div>
+        <h3>Personalanpassung</h3>
+        <p>6 Mitarbeiter abgebaut, 1 qualifizierter Zugang. Netto-Entlastung ab Juli: 22.360 € monatlich. Vollständig umgesetzt bis 31.03.2026.</p>
+      </div>
+      <div class="measure-card">
+        <div class="measure-number">+172 T€</div>
+        <h3>Neugeschäft gesichert</h3>
+        <p>Zwei Neukunden gewonnen: Cross Cult (~110 T€, 6 Monate) und Tolino (~8 T€/Monat ab Juni). Weitere Projekte in der Pipeline.</p>
+      </div>
+      <div class="measure-card">
+        <div class="measure-number">KI-Ready</div>
+        <h3>Produktivitätsprogramm</h3>
+        <p>Unternehmensweites KI-Readiness-Programm: Qualifizierung aller Mitarbeiter, Neugestaltung der Produktionsprozesse.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. KI READINESS -->
+<section>
+  <div class="container">
+    <h2>KI-Readiness: Zukunftsfähigkeit als Wettbewerbsvorteil</h2>
+    <p>active value hat Anfang 2026 ein unternehmensweites KI-Readiness-Programm gestartet. Ziel ist die systematische Integration von KI-Werkzeugen in den gesamten Produktionsprozess – von der Konzeption über Design bis zur Softwareentwicklung, Testing und Deployment.</p>
+    <p>Das Programm umfasst drei Säulen:</p>
+
+    <div class="measures-grid">
+      <div class="measure-card">
+        <h3>Qualifizierung</h3>
+        <p>Alle Mitarbeiter werden im Umgang mit KI-gestützten Entwicklungswerkzeugen geschult. Jeder Produktionsschritt wird auf KI-Potenzial geprüft.</p>
+      </div>
+      <div class="measure-card">
+        <h3>Prozess-Transformation</h3>
+        <p>Produktionsabläufe werden grundlegend neu gestaltet: Briefing, Code-Generierung, Review, Testing und Deployment mit KI-Unterstützung.</p>
+      </div>
+      <div class="measure-card">
+        <h3>Leistungsangebot</h3>
+        <p>KI wird als fester Bestandteil des Kundenangebots etabliert – von der KI-Beratung bis zur Entwicklung KI-gestützter Anwendungen.</p>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Ergebnis:</strong> Mit reduziertem Team erreicht active value eine vergleichbare oder höhere Lieferkapazität als zuvor. Die Personalanpassung geht nicht zu Lasten der Leistungsfähigkeit – die Agentur wird mit schlankerer Struktur wettbewerbsfähiger. Dieser Produktivitätsgewinn ist in der Umsatzplanung bewusst nicht als Upside eingerechnet und stellt eine zusätzliche Absicherung der Planung dar.
+    </div>
+  </div>
+</section>
+
+<!-- 3. KOSTENPLANUNG -->
+<section>
+  <div class="container">
+    <h2>Kostenplanung 2026</h2>
+    <p>Die Gesamtkosten sinken im Jahresverlauf deutlich – getrieben durch die stufenweise Personalentlastung. Die Betriebskosten bleiben stabil, der Wareneinkauf reduziert sich ab Juni durch den Wegfall eines externen Dienstleisters.</p>
+
+    <div class="chart-wrap">
+      <h3>Kostenentwicklung nach Kostenart (monatlich, in T€)</h3>
+      <div class="chart-legend">
+        <span><i style="background:#C0392B"></i>Personalkosten</span>
+        <span><i style="background:#E67E22"></i>Betriebskosten</span>
+        <span><i style="background:#D4AC0D"></i>Wareneinkauf</span>
+      </div>
+      <div style="position:relative;height:320px"><canvas id="costChart"></canvas></div>
+    </div>
+
+    <div class="highlight">
+      <strong>Kostenreduktion:</strong> Die monatlichen Gesamtkosten sinken von 190 T€ im Q1 auf 164 T€ ab Juli – eine Reduktion um 14 %. Die Personalkosten allein sinken um 24 T€ pro Monat.
+    </div>
+  </div>
+</section>
+
+<!-- 4. UMSATZPLANUNG -->
+<section>
+  <div class="container">
+    <h2>Umsatzplanung 2026</h2>
+    <p>Die Umsatzplanung basiert auf einer konservativen Fortschreibung des Bestandsgeschäfts (172 T€/Monat) und berücksichtigt ausschließlich bereits gesichertes Neugeschäft. Projekte in der Pipeline (u.a. Zwiesel, Holtzbrinck) sind nicht eingerechnet.</p>
+
+    <div class="chart-wrap">
+      <h3>Umsatzentwicklung: Bestand und Neugeschäft (monatlich, in T€)</h3>
+      <div class="chart-legend">
+        <span><i style="background:#8AB62D"></i>Bestandsgeschäft</span>
+        <span><i style="background:#6A9122"></i>Cross Cult</span>
+        <span><i style="background:#4A6B15"></i>Tolino</span>
+      </div>
+      <div style="position:relative;height:320px"><canvas id="revenueChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ERGEBNISPLANUNG -->
+<section>
+  <div class="container">
+    <h2>Ergebnisplanung und Break-even</h2>
+    <p>Durch die Kombination aus Kostenreduktion und Neugeschäft dreht das monatliche Ergebnis ab April ins Positive. Der kumulierte Break-even wird im Juli 2026 erreicht.</p>
+
+    <div class="chart-wrap">
+      <h3>Erlöse vs. Gesamtkosten (monatlich, in T€)</h3>
+      <div class="chart-legend">
+        <span><i style="background:#C0392B"></i>Personalkosten</span>
+        <span><i style="background:#E67E22"></i>Betriebskosten</span>
+        <span><i style="background:#D4AC0D"></i>Wareneinkauf</span>
+        <span><i style="background:#8AB62D;border-radius:50%"></i>Erlöse</span>
+      </div>
+      <div style="position:relative;height:340px"><canvas id="combiChart2"></canvas></div>
+    </div>
+
+    <div class="chart-wrap">
+      <h3>Monatsergebnis und kumulierte Entwicklung (in T€)</h3>
+      <div class="chart-legend">
+        <span><i style="background:#8AB62D"></i>Monatsergebnis positiv</span>
+        <span><i style="background:#C0392B"></i>Monatsergebnis negativ</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:22px;height:2px;border-top:2px dashed #3A3A3A"></span>Kumuliert</span>
+      </div>
+      <div style="position:relative;height:280px"><canvas id="resultChart2"></canvas></div>
+    </div>
+
+    <table class="q-table">
+      <thead>
+        <tr><th>Quartal</th><th>Erlöse</th><th>Kosten</th><th>Ergebnis</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Q1 (Jan–Mär)</td><td>540 T€</td><td>564 T€</td><td class="negative">−24 T€</td></tr>
+        <tr><td>Q2 (Apr–Jun)</td><td>579 T€</td><td>558 T€</td><td class="positive">+21 T€</td></tr>
+        <tr><td>Q3 (Jul–Sep)</td><td>595 T€</td><td>492 T€</td><td class="positive">+103 T€</td></tr>
+        <tr><td>Q4 (Okt–Dez)</td><td>546 T€</td><td>492 T€</td><td class="positive">+54 T€</td></tr>
+        <tr><td>Geschäftsjahr 2026</td><td>2.260 T€</td><td>2.105 T€</td><td class="positive">+155 T€</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 6. FINANZIERUNG -->
+<section>
+  <div class="container">
+    <h2>Finanzierungsperspektive</h2>
+    <p>Für die Überbrückungsphase bis zur vollständigen Stabilisierung bitten wir um Beibehaltung der aktuellen Kontokorrentlinie von 140.000 €. Ab dem zweiten Halbjahr 2026 planen wir, den Kontokorrent schrittweise in den ursprünglichen Rahmen von 70.000 € zurückzuführen.</p>
+
+    <div class="highlight">
+      <strong>Zusammengefasst:</strong> active value hat im Q1 2026 konsequent auf ein verändertes Marktumfeld reagiert. Die Kostenstruktur ist bereinigt, das Neugeschäft gesichert und die KI-gestützte Transformation der Produktionsprozesse im Gang. Ab April wirtschaftet das Unternehmen operativ profitabel, ab Juli ist der kumulierte Break-even erreicht. Das prognostizierte Jahresergebnis liegt bei +155 T€ – bei konservativer Planung und ohne Berücksichtigung weiterer Pipeline-Projekte.
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="container">
+    <h2>Gerne erläutern wir unsere Planung persönlich.</h2>
+    <p>Für Rückfragen und ein vertiefendes Gespräch stehen wir jederzeit zur Verfügung.</p>
+    <div class="cta-contact">
+      Anton Klees – Geschäftsführer<br>
+      <span style="color:var(--av-gray-300);font-weight:400;font-size:0.95rem">active value GmbH · Benzenbergstr. 39-47 · 40219 Düsseldorf</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    © 2026 active value GmbH · Dieses Dokument ist vertraulich und ausschließlich für den Adressaten bestimmt.
+  </div>
+</footer>
+
+<script>
+const labels = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const pk =     [145361, 150848, 150848, 149063, 149063, 144866, 126850, 126850, 126850, 126850, 126850, 126850];
+const bk =     [21586,  22000,  22000,  22000,  22000,  22000,  22000,  22000,  22000,  22000,  22000,  22000];
+const we =     [17067,  17000,  17000,  17000,  17000,  15000,  15000,  15000,  15000,  15000,  15000,  15000];
+const basis =  [180018, 174749, 184749, 172000, 172000, 172000, 172000, 172000, 172000, 172000, 172000, 172000];
+const cc =     [0, 0, 0, 18333, 18333, 18333, 18333, 18333, 18333, 2000, 2000, 2000];
+const tol =    [0, 0, 0, 0, 0, 8000, 8000, 8000, 8000, 8000, 8000, 8000];
+const umsatz = basis.map((b, i) => b + cc[i] + tol[i]);
+const ergebnis = umsatz.map((u, i) => u - pk[i] - bk[i] - we[i]);
+let kum = []; let s = 0; ergebnis.forEach(e => { s += e; kum.push(Math.round(s)); });
+
+const G = '#8AB62D', GD = '#6A9122', GDD = '#4A6B15', R = '#C0392B', O = '#E67E22', Y = '#D4AC0D', GR = '#3A3A3A';
+const fmt = v => new Intl.NumberFormat('de-DE', {maximumFractionDigits:0}).format(v);
+
+// Cost chart
+new Chart(document.getElementById('costChart'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      { label:'WE', data:we.map(v=>v/1000), backgroundColor:Y, stack:'s', barPercentage:0.55, borderRadius:{topLeft:0,topRight:0,bottomLeft:4,bottomRight:4} },
+      { label:'PK', data:pk.map(v=>v/1000), backgroundColor:R, stack:'s', barPercentage:0.55 },
+      { label:'BK', data:bk.map(v=>v/1000), backgroundColor:O, stack:'s', barPercentage:0.55, borderRadius:{topLeft:4,topRight:4,bottomLeft:0,bottomRight:0} }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales: {
+      y: { min:0, max:210, ticks:{ callback: v=>v+'T€', color:'#6B6B6B', font:{size:11} }, grid:{ color:'rgba(0,0,0,0.05)' } },
+      x: { ticks:{ autoSkip:false, color:'#6B6B6B', font:{size:11} }, grid:{ display:false } }
+    },
+    plugins: { legend:{ display:false }, tooltip:{ callbacks:{ label: ctx=>ctx.dataset.label+': '+ctx.raw.toFixed(0)+' T€' } } }
+  },
+  plugins: [{
+    id:'totals',
+    afterDraw(chart) {
+      const ctx=chart.ctx, meta=chart.getDatasetMeta(2);
+      ctx.save(); ctx.font='10px sans-serif'; ctx.fillStyle='#3A3A3A'; ctx.textAlign='center';
+      meta.data.forEach((bar,i) => {
+        const t = Math.round((pk[i]+bk[i]+we[i])/1000);
+        ctx.fillText(t+'T', bar.x, bar.y-5);
+      });
+      ctx.restore();
+    }
+  }]
+});
+
+// Revenue chart
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      { label:'Bestand', data:basis.map(v=>v/1000), backgroundColor:G, stack:'s', barPercentage:0.55, borderRadius:{topLeft:0,topRight:0,bottomLeft:4,bottomRight:4} },
+      { label:'Cross Cult', data:cc.map(v=>v/1000), backgroundColor:GD, stack:'s', barPercentage:0.55 },
+      { label:'Tolino', data:tol.map(v=>v/1000), backgroundColor:GDD, stack:'s', barPercentage:0.55, borderRadius:{topLeft:4,topRight:4,bottomLeft:0,bottomRight:0} }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales: {
+      y: { min:0, max:220, ticks:{ callback: v=>v+'T€', color:'#6B6B6B', font:{size:11} }, grid:{ color:'rgba(0,0,0,0.05)' } },
+      x: { ticks:{ autoSkip:false, color:'#6B6B6B', font:{size:11} }, grid:{ display:false } }
+    },
+    plugins: { legend:{ display:false }, tooltip:{ callbacks:{ label: ctx=>ctx.dataset.label+': '+ctx.raw.toFixed(0)+' T€' } } }
+  },
+  plugins: [{
+    id:'totals',
+    afterDraw(chart) {
+      const ctx=chart.ctx, meta=chart.getDatasetMeta(2);
+      ctx.save(); ctx.font='10px sans-serif'; ctx.fillStyle=GD; ctx.textAlign='center';
+      meta.data.forEach((bar,i) => {
+        const t = Math.round(umsatz[i]/1000);
+        ctx.fillText(t+'T', bar.x, bar.y-5);
+      });
+      ctx.restore();
+    }
+  }]
+});
+
+// Combined chart
+new Chart(document.getElementById('combiChart2'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      { label:'WE', data:we.map(v=>v/1000), backgroundColor:Y, stack:'c', barPercentage:0.55, borderRadius:{topLeft:0,topRight:0,bottomLeft:4,bottomRight:4}, order:3 },
+      { label:'PK', data:pk.map(v=>v/1000), backgroundColor:R, stack:'c', barPercentage:0.55, order:3 },
+      { label:'BK', data:bk.map(v=>v/1000), backgroundColor:O, stack:'c', barPercentage:0.55, borderRadius:{topLeft:4,topRight:4,bottomLeft:0,bottomRight:0}, order:3 },
+      { label:'Erlöse', data:umsatz.map(v=>v/1000), type:'line', borderColor:G, backgroundColor:'transparent', pointRadius:5, pointBackgroundColor:G, borderWidth:2.5, tension:0.15, order:1 }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales: {
+      y: { min:0, max:220, ticks:{ callback: v=>v+'T€', color:'#6B6B6B', font:{size:11} }, grid:{ color:'rgba(0,0,0,0.05)' } },
+      x: { ticks:{ autoSkip:false, color:'#6B6B6B', font:{size:11} }, grid:{ display:false } }
+    },
+    plugins: { legend:{ display:false }, tooltip:{ callbacks:{ label: ctx=>ctx.dataset.label+': '+ctx.raw.toFixed(0)+' T€' } } }
+  }
+});
+
+// Result chart
+new Chart(document.getElementById('resultChart2'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      {
+        label:'Monatsergebnis',
+        data:ergebnis.map(v=>Math.round(v/1000)),
+        backgroundColor:ergebnis.map(v => v>=0 ? G : R),
+        borderRadius:4, barPercentage:0.55, order:2
+      },
+      {
+        label:'Kumuliert',
+        data:kum.map(v=>Math.round(v/1000)),
+        type:'line', borderColor:GR, backgroundColor:'transparent',
+        pointRadius:4, pointBackgroundColor:kum.map(v=>v>=0?G:GR),
+        borderWidth:2, borderDash:[6,4], tension:0.2, order:1
+      }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    scales: {
+      y: { ticks:{ callback: v=>{const a=Math.abs(v); return (v<0?'−':v>0?'+':'')+a+' T€';}, color:'#6B6B6B', font:{size:11} }, grid:{ color:'rgba(0,0,0,0.05)' } },
+      x: { ticks:{ autoSkip:false, color:'#6B6B6B', font:{size:11} }, grid:{ display:false } }
+    },
+    plugins: { legend:{ display:false }, tooltip:{ callbacks:{ label: ctx=>ctx.dataset.label+': '+ctx.raw+' T€' } } }
+  },
+  plugins: [{
+    id:'zero',
+    afterDraw(chart) {
+      const y=chart.scales.y.getPixelForValue(0), ctx=chart.ctx;
+      ctx.save(); ctx.strokeStyle='rgba(0,0,0,0.15)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(chart.chartArea.left,y); ctx.lineTo(chart.chartArea.right,y); ctx.stroke(); ctx.restore();
+    }
+  },
+  {
+    id:'labels',
+    afterDraw(chart) {
+      const ctx=chart.ctx, meta=chart.getDatasetMeta(0);
+      ctx.save(); ctx.font='10px sans-serif'; ctx.textAlign='center';
+      meta.data.forEach((bar,i) => {
+        const v=Math.round(ergebnis[i]/1000), sign=v>0?'+':'';
+        ctx.fillStyle=ergebnis[i]>=0?GD:'#A32D2D';
+        ctx.fillText(sign+v+'T', bar.x, ergebnis[i]>=0?bar.y-5:bar.y+13);
+      });
+      ctx.restore();
+    }
+  },
+  {
+    id:'be',
+    afterDraw(chart) {
+      const ctx=chart.ctx, meta=chart.getDatasetMeta(1), pt=meta.data[6];
+      if(pt) { ctx.save(); ctx.font='500 11px sans-serif'; ctx.fillStyle=GD; ctx.textAlign='center'; ctx.fillText('Break-even',pt.x,pt.y-12); ctx.restore(); }
+    }
+  }]
+});
+</script>
+
+</body>
+</html>
