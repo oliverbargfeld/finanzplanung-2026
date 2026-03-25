@@ -81,11 +81,11 @@ footer { padding: 1.5rem 0; text-align: center; font-size: 0.75rem; color: var(-
   <div class="container">
     <div class="kpi-grid">
       <div class="kpi-item">
-        <div class="kpi-value">2,26 Mio €</div>
+        <div class="kpi-value">2,25 Mio €</div>
         <div class="kpi-label">Umsatzprognose</div>
       </div>
       <div class="kpi-item">
-        <div class="kpi-value">+176 T€</div>
+        <div class="kpi-value">+166 T€</div>
         <div class="kpi-label">Jahresergebnis</div>
       </div>
       <div class="kpi-item">
@@ -93,7 +93,7 @@ footer { padding: 1.5rem 0; text-align: center; font-size: 0.75rem; color: var(-
         <div class="kpi-label">Erster positiver Monat</div>
       </div>
       <div class="kpi-item">
-        <div class="kpi-value">7,8 %</div>
+        <div class="kpi-value">7,4 %</div>
         <div class="kpi-label">Umsatzrendite</div>
       </div>
     </div>
@@ -212,11 +212,11 @@ footer { padding: 1.5rem 0; text-align: center; font-size: 0.75rem; color: var(-
     <table class="q-table">
       <thead><tr><th>Quartal</th><th>Erlöse</th><th>Kosten</th><th>Ergebnis</th></tr></thead>
       <tbody>
-        <tr><td>Q1 (Jan–Mär)</td><td>540 T€</td><td>558 T€</td><td class="negative">−19 T€</td></tr>
+        <tr><td>Q1 (Jan–Mär)</td><td>530 T€</td><td>558 T€</td><td class="negative">−29 T€</td></tr>
         <tr><td>Q2 (Apr–Jun)</td><td>579 T€</td><td>542 T€</td><td class="positive">+37 T€</td></tr>
         <tr><td>Q3 (Jul–Sep)</td><td>595 T€</td><td>492 T€</td><td class="positive">+103 T€</td></tr>
         <tr><td>Q4 (Okt–Dez)</td><td>546 T€</td><td>492 T€</td><td class="positive">+54 T€</td></tr>
-        <tr><td>Geschäftsjahr 2026</td><td>2.260 T€</td><td>2.084 T€</td><td class="positive">+176 T€</td></tr>
+        <tr><td>Geschäftsjahr 2026</td><td>2.250 T€</td><td>2.083 T€</td><td class="positive">+166 T€</td></tr>
       </tbody>
     </table>
   </div>
@@ -227,7 +227,7 @@ footer { padding: 1.5rem 0; text-align: center; font-size: 0.75rem; color: var(-
     <h2>Finanzierungsperspektive</h2>
     <p>Für die Überbrückungsphase bis zur vollständigen Stabilisierung bitten wir um Beibehaltung der aktuellen Kontokorrentlinie von 140.000 €. Ab dem zweiten Halbjahr 2026 planen wir, den Kontokorrent schrittweise in den ursprünglichen Rahmen von 70.000 € zurückzuführen.</p>
     <div class="highlight">
-      <strong>Zusammengefasst:</strong> active value hat im Q1 2026 konsequent auf ein verändertes Marktumfeld reagiert. Die Kostenstruktur ist bereinigt, das Neugeschäft gesichert und die KI-gestützte Transformation der Produktionsprozesse im Gang. Ab März wirtschaftet das Unternehmen operativ profitabel. Das prognostizierte Jahresergebnis liegt bei +176 T€ – bei konservativer Planung und ohne Berücksichtigung weiterer Pipeline-Projekte.
+      <strong>Zusammengefasst:</strong> active value hat im Q1 2026 konsequent auf ein verändertes Marktumfeld reagiert. Die Kostenstruktur ist bereinigt, das Neugeschäft gesichert und die KI-gestützte Transformation der Produktionsprozesse im Gang. Ab März wirtschaftet das Unternehmen operativ profitabel. Das prognostizierte Jahresergebnis liegt bei +166 T€ – bei konservativer Planung und ohne Berücksichtigung weiterer Pipeline-Projekte.
     </div>
   </div>
 </section>
@@ -247,7 +247,7 @@ const labels = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','No
 const pk =     [145361, 150848, 145499, 143714, 143714, 139517, 126850, 126850, 126850, 126850, 126850, 126850];
 const bk =     [21586,  22000,  22000,  22000,  22000,  22000,  22000,  22000,  22000,  22000,  22000,  22000];
 const we =     [17067,  17000,  17000,  17000,  17000,  15000,  15000,  15000,  15000,  15000,  15000,  15000];
-const basis =  [180018, 174749, 184749, 172000, 172000, 172000, 172000, 172000, 172000, 172000, 172000, 172000];
+const basis =  [180018, 174749, 174749, 172000, 172000, 172000, 172000, 172000, 172000, 172000, 172000, 172000];
 const cc =     [0, 0, 0, 18333, 18333, 18333, 18333, 18333, 18333, 2000, 2000, 2000];
 const tol =    [0, 0, 0, 0, 0, 8000, 8000, 8000, 8000, 8000, 8000, 8000];
 const umsatz = basis.map((b, i) => b + cc[i] + tol[i]);
